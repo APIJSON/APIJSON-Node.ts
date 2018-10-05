@@ -3,6 +3,7 @@
    "version": "0.0.1",
    "description": "Awesome project developed with TypeORM.",
    "devDependencies": {
+      "@types/dotenv": "^4.0.3",
       "@types/node": "^8.0.29",
       "ts-node": "^7.0.1",
       "typescript": "2.5.2"
@@ -11,19 +12,24 @@
       "@types/koa": "^2.0.46",
       "@types/koa-bodyparser": "^5.0.1",
       "@types/koa-router": "^7.0.31",
+      "class-transformer": "^0.1.9",
+      "class-validator": "^0.9.1",
+      "dotenv": "^6.0.0",
       "koa": "^2.5.3",
       "koa-bodyparser": "^4.2.1",
       "koa-multer": "^1.0.2",
       "koa-router": "^7.4.0",
+      "mockjs": "^1.0.1-beta3",
       "mysql": "^2.14.1",
       "reflect-metadata": "^0.1.10",
       "routing-controllers": "^0.7.7",
       "rxjs": "^6.3.2",
       "tsconfig-paths": "^3.6.0",
+      "typedi": "^0.8.0",
       "typeorm": "0.2.7"
    },
    "scripts": {
       "start": "ts-node src/index.ts",
-      "nodemon":"nodemon"
+      "nodemon": "nodemon"
    }
 }

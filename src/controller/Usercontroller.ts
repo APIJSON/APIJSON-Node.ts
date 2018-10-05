@@ -2,37 +2,40 @@ import { Controller, Param, Body, Get, Post, Put, Delete } from "routing-control
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 import { Message } from "../entity/Message";
+import { UserService } from "../service/user.service";
+import { getRandom } from "../util";
+const MockJs = require('mockjs');
+const story = require('./txt');
 
-function getRandom(n: number) {
-    return Math.floor(Math.random() * n)
-}
 
 @Controller()
 export class UserController {
+    constructor(
+        private userSrv: UserService
+    ) { }
 
     @Get("/users")
     async getAll() {
+        // init
         const user = new User();
-        user.firstName = "Timber";
-        user.lastName = "Saw";
-        user.age = Math.floor(Math.random() * 1000);
-        debugger
-        try {
-            // await respoitory.save(user)
-            let result = await user.save();
-            let msg = new Message;
-            msg.userId = result.id;
-            msg.content = '史丹佛哈是东方红'.slice(getRandom(100), getRandom(100))
-            await msg.save();
-        } catch (error) {
-            console.log(error)
-        }
-        return "This action returns all users";
+        const msg = this.userSrv.createMsg();
+        user.firstName = MockJs.Random.first();
+        user.lastName = MockJs.Random.last();
+        user.cName = MockJs.Random.cname() + MockJs.Random.cfirst();
+        user.age = getRandom(60);
+        user.sex = getRandom(100) > 50 ? 0 : 1
+        // save
+        await msg.save();
+        let _msg = this.userSrv.createMsg()
+        await _msg.save()
+        user.message = [msg, _msg]
+        await user.save()
+        return "Success";
     }
 
     @Get("/users/:id")
-    getOne(@Param("id") id: number) {
-        return "This action returns user #" + id;
+    async getOne(@Param("id") id: number) {
+        return await User.find({ relations: ["message"], where: { id: id } });
     }
 
     @Post("/users")
@@ -48,6 +51,14 @@ export class UserController {
     @Delete("/users/:id")
     remove(@Param("id") id: number) {
         return "Removing user...";
+    }
+    @Get('/test/:id')
+    async test(@Param('id') id) {
+        return await User.find({
+            where: { id: id },
+            loadRelationIds: true,
+            relations:['message']
+        })
     }
 
 }
